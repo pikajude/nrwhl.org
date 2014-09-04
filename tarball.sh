@@ -9,6 +9,6 @@ done
 echo "git archiving $@"
 cp -prd --no-preserve=timestamps "$@" $TMPDIR/tarball
 cd $TMPDIR/tarball
-git archive -o dist.tar.gz
+git archive $(git rev-parse HEAD) -o dist.tar.gz --prefix dist/
 mkdir -p $out
 cp dist.tar.gz $out

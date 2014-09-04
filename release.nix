@@ -8,15 +8,15 @@ let
   genAttrs = pkgs.lib.genAttrs;
 in rec {
   tarball = let
-    darcsTag = builtins.substring 9 6
-      (builtins.readFile ./_darcs/hashed_inventory);
+    darcsTag = builtins.substring 0 6
+      (builtins.readFile ./.git/refs/heads/master);
     in with pkgs; derivation rec {
       system = builtins.currentSystem;
       name = "narwhal-tarball-${version}_${darcsTag}";
       version = "0.0.0";
       builder = ./tarball.sh;
       args = [ (builtins.toString ./.) ];
-      buildInputs = [ darcs coreutils ];
+      buildInputs = [ git gzip coreutils ];
     };
 
   build = genAttrs supportedCompilers (ghcVer: genAttrs supportedPlatforms (system:
