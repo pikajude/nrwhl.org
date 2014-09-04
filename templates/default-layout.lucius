@@ -1,0 +1,79 @@
+body {
+  background: url(@{StaticR img_bg_png});
+
+  header.navbar {
+    color: white;
+
+    .navbar-header {
+      margin-right: 10px;
+
+      a {
+        display: block;
+        padding: 15px 0;
+      }
+    }
+
+    #nrwhl-navbar > ul > li > a {
+      color: #f4f4f4;
+
+      &.avatar-pic-link {
+        padding: 10px;
+      }
+    }
+  }
+
+  .jumbotron {
+    padding-top: 80px;
+  }
+
+  #special-send-icon {
+    font-size: 15px;
+    top: 3px;
+  }
+
+  #main {
+    padding-top: 80px;
+
+    #everything {
+      background: white;
+      padding: 25px;
+      margin-bottom: 40px;
+
+      .alert.messages {
+        margin-bottom: 10px;
+        padding: 10px;
+
+        .close {
+          right: 4px;
+        }
+      }
+
+      h1:first-child, h2:first-child {
+        margin-top: 0;
+      }
+    }
+
+    .container-debug {
+      background: white;
+      word-wrap: break-word;
+    }
+  }
+}
+
+.message-nav {
+  .glyphicon {
+    margin-right: 3px;
+  }
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  body {
+    background-image: url(@{StaticR img_bg_2x_png});
+    background-size: 102px 102px;
+  }
+}
+
+input:focus {
+  z-index: 2;
+  position: relative;
+}

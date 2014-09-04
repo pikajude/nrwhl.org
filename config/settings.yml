@@ -1,0 +1,24 @@
+Default: &defaults
+  host: "*4"
+  port: 3000
+  approot: "http://localhost:3000"
+  copyright: Insert copyright statement here
+  aws-s3-bucket: nrwhl-dev
+  upload-domain: d2aio3f6lky9bu.cloudfront.net
+  airbrake-host: 'http://localhost:9292'
+
+Development:
+  <<: *defaults
+
+Testing:
+  <<: *defaults
+
+Staging:
+  <<: *defaults
+  approot: "https://nrwhl.org"
+  aws-s3-bucket: nrwhl-test
+  upload-domain: d20ipwx4bmmwq6.cloudfront.net
+  airbrake-host: 'http://api.airbrake.io'
+
+Production:
+  <<: *defaults

@@ -1,0 +1,22 @@
+#{extra}
+$maybe errs <- fvErrors recipientsView
+  <p .alert .alert-danger>
+    <strong>Recipients:
+    ^{errs}
+$maybe errs <- fvErrors subjectView
+  <p .alert .alert-danger>
+    <strong>Subject:
+    ^{errs}
+$maybe errs <- fvErrors contentView
+  <p .alert .alert-danger>
+    <strong>Content:
+    ^{errs}
+<div .row>
+  <div .form-group .col-md-3>
+    <label for=#{fvId recipientsView}>^{fvLabel recipientsView}
+    ^{fvInput recipientsView}
+  <div .form-group .col-md-9>
+    <label for=#{fvId subjectView}>^{fvLabel subjectView}
+    ^{fvInput subjectView}
+<div .form-group>^{fvInput contentView}
+<button type=submit .btn .btn-default .pull-right>Send

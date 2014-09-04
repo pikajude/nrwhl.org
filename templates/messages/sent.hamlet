@@ -1,0 +1,15 @@
+<div .single-message>
+  <div .message-metadata>
+    <p .subject>
+      <strong>Subject:
+      #{messageSubject msg}
+    <p .to>
+      <strong>To:
+      <span .recipients>
+        ^{commas userLink recipients}
+        $if ct > length recipients
+          \ and
+          <a href=@{MessageRecipientsViewR mid} .more-recipients>
+            #{show (ct - length recipients)} more
+
+  <div .message-contents>#{messageContents msg}

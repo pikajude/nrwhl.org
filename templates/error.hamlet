@@ -1,0 +1,3 @@
+<img .angrycorn src=@{st img_unicorn_png}>
+<h2>#{title}
+<p>^{subtext}

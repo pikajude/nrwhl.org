@@ -1,0 +1,5 @@
+<form .pill role=form method=post action=@{tm login}>
+  <h2>Log in
+  <input .form-control #username type=text name=username required placeholder=Username autofocus>
+  <input .form-control #password type=password name=password required placeholder=Password>
+  <input type=submit .btn .btn-success value="Log in">

@@ -1,0 +1,2 @@
+<form role=form enctype=#{enctype} method=post action=@{MessageNewR}>
+  ^{widget}

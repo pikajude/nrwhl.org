@@ -1,0 +1,6 @@
+<h1 .page-header>
+  <span .glyphicon .glyphicon-pencil .small>
+  ^{teamLink t}
+<form .form-horizontal role=form enctype=#{enctype} method=post action=@{TeamEditR tid}>
+  ^{widget}
+  <button type=submit .pull-right .btn .btn-default>Update

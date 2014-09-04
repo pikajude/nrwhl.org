@@ -1,0 +1,20 @@
+<h2>Join narwhl
+#{extra}
+$maybe errs <- fvErrors emailView
+  <p .alert .alert-danger>
+    <strong>Email:
+    ^{errs}
+$maybe errs <- fvErrors passwordView
+  <p .alert .alert-danger>
+    <strong>Password:
+    ^{errs}
+$maybe errs <- fvErrors usernameView
+  <p .alert .alert-danger>
+    <strong>Username:
+    ^{errs}
+<label for=#{fvId emailView} .sr-only>^{fvLabel emailView}
+^{fvInput emailView}
+<label for=#{fvId usernameView} .sr-only>^{fvLabel usernameView}
+^{fvInput usernameView}
+<label for=#{fvId passwordView} .sr-only>^{fvLabel passwordView}
+^{fvInput passwordView}

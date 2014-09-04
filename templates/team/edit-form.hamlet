@@ -1,0 +1,42 @@
+^{extra}
+$maybe errs <- fvErrors nameView
+  <p .alert .alert-danger>
+    <strong>Team name:
+    ^{errs}
+$maybe errs <- fvErrors logoView
+  <p .alert .alert-danger>
+    <strong>Logo:
+    ^{errs}
+$maybe errs <- fvErrors gmView
+  <p .alert .alert-danger>
+    <strong>GM:
+    ^{errs}
+$maybe errs <- fvErrors agmView
+  <p .alert .alert-danger>
+    <strong>AGM:
+    ^{errs}
+$maybe errs <- fvErrors colorView
+  <p .alert .alert-danger>
+    <strong>Team color:
+    ^{errs}
+
+<div .team-stuff>
+  <div .logo-column>
+    ^{fvInput logoView}
+    <p .help-block>Click on the box or drag an image onto it to upload.
+  <div .team-column>
+    <div .form-group>
+      <label .col-sm-2 .control-label for=#{fvId nameView}>^{fvLabel nameView}
+      <div .col-sm-10>^{fvInput nameView}
+    <div .form-group>
+      <label .col-sm-2 .control-label for=#{fvId gmView}>^{fvLabel gmView}
+      <div .col-sm-10>^{fvInput gmView}
+    <div .form-group>
+      <label .col-sm-2 .control-label for=#{fvId agmView}>^{fvLabel agmView}
+      <div .col-sm-10>^{fvInput agmView}
+    <div .form-group>
+      <label .col-sm-2 .control-label for=#{fvId colorView}>^{fvLabel colorView}
+      <div .col-sm-10>^{fvInput colorView}
+    <div .form-group>
+      <label .col-sm-2 .control-label for=#{fvId theView}>^{fvLabel theView}
+      <div .col-sm-10 .needs-padding>^{fvInput theView}

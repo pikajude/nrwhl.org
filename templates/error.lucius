@@ -1,0 +1,11 @@
+body #main #everything {
+  h2, p {
+    text-align: center;
+  }
+
+  .angrycorn {
+    display: block;
+    width: 205px;
+    margin: 0 auto;
+  }
+}

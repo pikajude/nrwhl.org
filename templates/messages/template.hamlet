@@ -1,0 +1,29 @@
+<h1 .message-header .page-header>
+  Messages » #
+  $if isInbox
+    Inbox
+  $if isOutbox
+    Outbox
+  $if isNewMessage
+    New
+<div .row>
+  <div .col-md-2>
+    <ul .nav .nav-stacked .message-nav>
+      <li :isNewMessage:.active>
+        <a href=@{MessageNewR}>
+          <span .glyphicon .glyphicon-pencil>
+          New message
+
+      <li :isInbox:.active>
+        <a href=@{MessageInboxR}>
+          <span .glyphicon .glyphicon-inbox>
+          Inbox
+          $with unread <- userUnreadMessageCount (entityVal user)
+            $if unread > 0
+              <span .badge>#{unread}
+      <li :isOutbox:.active>
+        <a href=@{MessageOutboxR}>
+          <span .glyphicon .glyphicon-send>
+          Outbox
+  <div .col-md-10>
+    ^{widget}

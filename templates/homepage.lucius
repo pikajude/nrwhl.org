@@ -1,0 +1,10 @@
+h1 {
+  text-align: center;
+  font-size: 500%;
+
+  span {
+    padding-left: 80px;
+    background: url(@{StaticR img_narwhal_dark_svg}) no-repeat left 26px;
+    background-size: 70px;
+  }
+}

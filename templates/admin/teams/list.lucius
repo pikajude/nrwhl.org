@@ -1,0 +1,11 @@
+.logo-column {
+  width: 70px;
+
+  img {
+    max-width: 50px;
+  }
+}
+
+.table > tbody > tr > td {
+  vertical-align: middle;
+}

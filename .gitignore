@@ -1,0 +1,6 @@
+.env
+dist
+result
+static/combined
+static/tmp
+yesod-devel

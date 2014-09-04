@@ -1,0 +1,49 @@
+<h1>Find players
+$if not (null (pageResults players))
+  ^{pageLinks players}
+<form .form-inline role=form action=@{PlayerFindR} method=get>
+  <div .form-group .form-header>Filter by: #
+  <div .form-group .filter-name>
+    <label .sr-only for=filter-name>username
+    <input type=text name=username .form-control #filter-name
+           placeholder="username" value=#{nameFilter}>
+  <div .form-group .team-dropdown>
+    <label .sr-only for=filter-team>teams
+    <select #select-team placeholder=teams name=team multiple>
+      $forall Entity k team <- teams'
+        $if elem k teamIds
+          <option value=#{unId k} data-color=#{teamColor team} selected>#{teamName team}
+        $else
+          <option value=#{unId k} data-color=#{teamColor team}>#{teamName team}
+  <div .form-group .filter-go>
+    <button type=submit .btn .btn-default>Go
+
+$if null (pageResults players)
+  No players found!
+$else
+  <table .table .table-striped .table-bordered>
+    <tr>
+      <th>Username
+      <th>Team
+      <th>Position
+      <th>Join date
+      <th>Last active
+    $forall Entity _ pl <- pageResults players
+      <tr>
+        <td>
+          ^{userLink pl}
+        <td>
+          $maybe t <- userCurrentTeam pl
+            ^{teamLink (teamof t)}
+          $nothing
+            -
+        <td>
+          $maybe pos <- userPosition pl
+            #{show pos}
+          $nothing
+            -
+        <td>#{formatTime (userJoinDate pl)}
+        <td>
+          <span title=#{formatTime (userLastSeenDate pl)}>
+            ^{friendlyTime (userLastSeenDate pl)}
+  ^{pageLinks players}

@@ -1,0 +1,30 @@
+.form-header {
+  margin-right: 6px;
+  padding-top: 6px;
+}
+
+.top-links {
+  overflow: hidden;
+  padding-bottom: 10px;
+}
+
+.form-header, .filter-name, .filter-go {
+  vertical-align: top !important;
+}
+
+.form-inline {
+  margin-bottom: 8px;
+}
+
+.team-dropdown {
+  width: 350px;
+  position: relative;
+}
+
+#select-team {
+  height: 34px;
+}
+
+table {
+  margin-top: 10px;
+}

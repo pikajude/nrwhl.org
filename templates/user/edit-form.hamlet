@@ -1,0 +1,20 @@
+^{extra}
+$maybe errs <- fvErrors emailView
+  <p .alert .alert-danger>
+    <strong>Email:
+    ^{errs}
+$maybe errs <- fvErrors avatarView
+  <p .alert .alert-danger>
+    <strong>Avatar:
+    ^{errs}
+
+<div .form-group>
+  <label .col-sm-2 .control-label for=#{fvId emailView}>^{fvLabel emailView}
+  <div .col-sm-10>^{fvInput emailView}
+<div .form-group>
+  <label .col-sm-2 .control-label for=#{fvId avatarView}>^{fvLabel avatarView}
+  <div .col-sm-10>^{fvInput avatarView}
+$if adm
+  <div .form-group>
+    <label .col-sm-2 .control-label for=#{fvId curTeamView}>^{fvLabel curTeamView}
+    <div .col-sm-10>^{fvInput curTeamView}

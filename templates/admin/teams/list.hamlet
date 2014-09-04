@@ -1,0 +1,32 @@
+<h1 .page-header>All Teams
+
+<div .btn-group>
+  <a .btn .btn-xs .btn-default href=@{ManageTeamsNewR}>New team
+
+<table .table>
+  <thead>
+    <tr>
+      <th .logo-column>Logo
+      <th>Name
+      <th>GM
+      <th>AGM
+  <tbody>
+    $if null teams
+      <tr>
+        <td colspan=4>Nothing here!
+    $else
+      $forall (Entity _ t, mg, ma) <- teams
+        <tr>
+          <td .logo-column>
+            <img .img-responsive src=@{S3AssetR (teamLogo t)}>
+          <td>^{teamLink t}
+          <td>
+            $maybe Entity _ gm <- mg
+              ^{userLink gm}
+            $nothing
+              -
+          <td>
+            $maybe Entity _ agm <- ma
+              ^{userLink agm}
+            $nothing
+              -

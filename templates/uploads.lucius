@@ -1,0 +1,26 @@
+/* uploads */
+#file-preview {
+  position: relative;
+  outline: 4px dashed #bbb;
+
+  &:hover {
+    outline-color: #999;
+  }
+
+  img, input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+
+  input {
+    z-index: 9999;
+    opacity: 0;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

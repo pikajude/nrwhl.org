@@ -1,0 +1,4 @@
+<h1 .page-header>Edit your profile
+<form .form-horizontal action=@{UserEditR name} method=post enctype=#{enctype}>
+  ^{widget}
+  <button type=submit .pull-right .btn .btn-default>Update

@@ -1,0 +1,20 @@
+<div .team-page>
+  <div .info-column>
+    <img src=@{S3AssetR (teamLogo tm)} width=350 height=350>
+    $if canEditTeam
+      <div .btn-group .team-admin-buttons>
+        <a .btn .btn-sm .btn-default href=@{TeamEditR k}>
+          <span .glyphicon .glyphicon-cog>
+          Edit team
+        <a .btn .btn-sm .btn-default href=@{TeamRosterR k}>
+          <span .glyphicon .glyphicon-user>
+          Manage roster
+  <div .roster-column>
+    <h1>
+      <span style="color: ##{teamColor tm}">#{teamName tm}
+      $maybe gm <- mgm
+        \ <small>GM: ^{userLink gm}</small>
+    <div .panel .panel-default>
+      <div .panel-heading>
+        <h3 .panel-title>Roster
+      ^{statTable players heading ef hf}

@@ -1,0 +1,46 @@
+/static StaticR Static getStatic
+/auth   AuthR   Auth   getAuth
+
+/favicon.ico FaviconR GET
+/robots.txt RobotsR GET
+
+/                     HomeR GET
+/about                AboutR GET
+
+/register               AuthRegisterR GET POST
+/verify/#Username/#Text AuthVerifyR GET
+
+/user/#Username       UserViewR GET
+/user/#Username/edit  UserEditR GET POST
+
+/release/#Username    PlayerReleaseR POST
+/players              PlayerFindR GET
+/players/page/#Int    PlayerFindPageR GET
+
+/team/#Text                    TeamViewR GET
+/teams/edit/#TeamId            TeamEditR GET POST
+/teams/edit/#TeamId/roster     TeamRosterR GET
+/teams/edit/#TeamId/roster/gm  TeamRosterGMR POST
+/teams/edit/#TeamId/roster/agm TeamRosterAGMR POST
+/teams                         TeamFindR GET
+
+/messages/inbox                      MessageInboxR GET
+/messages/inbox/page/#Int            MessageInboxPageR GET
+/messages/outbox                     MessageOutboxR GET
+/messages/outbox/page/#Int           MessageOutboxPageR GET
+/messages/new                        MessageNewR GET POST
+/messages/new/search                 MessageRecipientSearchR POST
+/messages/sent/#MessageId            MessageSentR GET
+/messages/sent/#MessageId/recipients MessageRecipientsViewR POST
+/message/read/#MessageHash           MessageReadR GET
+/message/reply/#MessageHash          MessageReplyR GET
+
+/admin                  AdminR GET POST
+/admin/manage/teams     ManageTeamsR GET
+/admin/manage/teams/new ManageTeamsNewR GET POST
+/be/#UserId             AdminImpersonateStartR GET
+/be_yourself            AdminImpersonateStopR GET
+
+/draft DraftR GET
+
+/s3assets/#Filename S3AssetR GET

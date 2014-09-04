@@ -1,0 +1,64 @@
+.team-page {
+  position: relative;
+  padding-left: 390px;
+  min-height: 400px;
+
+  .team-admin-buttons {
+    margin-top: 24px;
+  }
+
+  .info-column {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 370px;
+    padding: 10px;
+
+    img {
+      display: block;
+      width: 350px;
+      height: auto;
+    }
+  }
+
+  .roster-column {
+    h1 {
+      margin-bottom: 18px;
+    }
+
+    .roster-heading {
+      text-transform: uppercase;
+      font-weight: bold;
+      color: #888;
+      font-size: 80%;
+    }
+
+    th {
+      -webkit-user-select: none;
+      cursor: default;
+    }
+
+    th span {
+      padding: 5px;
+    }
+
+    td:not(.first), th:not(.first) {
+      text-align: center;
+    }
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .team-page {
+    padding-left: 0;
+
+    .info-column {
+      position: relative;
+      width: 100%;
+
+      img {
+        margin: 0 auto;
+      }
+    }
+  }
+}

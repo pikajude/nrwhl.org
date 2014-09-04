@@ -1,0 +1,84 @@
+<header .navbar .navbar-inverse .navbar-fixed-top>
+  <div .container>
+    <div .navbar-header>
+      <button .navbar-toggle type=button data-toggle=collapse data-target=#nrwhl-navbar>
+        <span .sr-only>Toggle navigation
+        <span .icon-bar>
+        <span .icon-bar>
+        <span .icon-bar>
+    <nav .collapse .navbar-collapse #nrwhl-navbar role=navigation>
+      <ul .nav .navbar-nav>
+        <li :isHome:.active>
+          <a href=@{HomeR} .avatar-pic-link>
+            <img src=@{StaticR img_narwhal_light_svg} width=50 height=29>
+        $maybe m <- mau
+          <li .dropdown :isProfilePage:.active>
+            <a href=# .dropdown-toggle .avatar-pic-link data-toggle=dropdown>
+              $maybe url <- userAvatar m
+                <img src=@{S3AssetR url} width=30 height=30 .img-circle>
+              $nothing
+                <img src="holder.js/30x30" .img-circle>
+              <b .caret>
+            <ul .dropdown-menu>
+              <li>
+                <a href=@{UserViewR (userName m)}>Profile
+              <li>
+                <a href=@{UserEditR (userName m)}>Edit profile
+              $maybe t <- currentTeam
+                <li>
+                  <a href=@{TeamViewR (teamFriendlyName t)}>#{teamName t}
+              $if imp
+                <li>
+                  <a href=@{AdminImpersonateStopR}>Stop impersonating
+              <li>
+                <a href=@{AuthR LogoutR}>Log out
+          <li :isMessagesPage:.active>
+            <a href=@{MessageInboxR}>
+              inbox  #
+              $if userUnreadMessageCount m > 0
+                <span .badge>#{userUnreadMessageCount m}
+          $if isAdmin
+            <li .dropdown>
+              <a href=# .dropdown-toggle data-toggle=dropdown>
+                admin
+                <b .caret>
+              <ul .dropdown-menu>
+                <li>
+                  <a href=@{ManageTeamsR}>Manage teams
+        $nothing
+          <li :isLogin:.active>
+            <a href=@{AuthR LoginR}>log in
+          <li :isRegister:.active>
+            <a href=@{AuthRegisterR}>register
+
+      <ul .nav .navbar-nav .navbar-right>
+        <li :isSearchPage:.active .dropdown>
+          <a href=# .dropdown-toggle data-toggle=dropdown>
+            <span .glyphicon .glyphicon-search>
+            <b .caret>
+          <ul .dropdown-menu>
+            <li>
+              <a href=@{PlayerFindR}>Players
+              <a href=@{TeamFindR}>Teams
+
+$# <div .jumbotron #banner>
+$#   <div .container>
+$#     <h1>
+$#       <a href=@{HomeR}>nrwhl
+<div #main>
+  <div .container #everything>
+    $maybe m <- mmsg
+      <div .alert .alert-warning .alert-dismissable .messages>
+        <button type=button .close data-dismiss=alert aria-hidden=true>×
+        #{m}
+    ^{widget}
+  $if development
+    <div .container .container-debug .alert .alert-dismissable .messages>
+      <button type=button .close data-dismiss=alert aria-hidden=true>×
+      #{show mau}
+    <div .container .container-debug .alert .alert-dismissable .messages>
+      <button type=button .close data-dismiss=alert aria-hidden=true>×
+      #{show currentRoute}
+    <div .container .container-debug .alert .alert-dismissable .messages>
+      <button type=button .close data-dismiss=alert aria-hidden=true>×
+      #{show wreq}

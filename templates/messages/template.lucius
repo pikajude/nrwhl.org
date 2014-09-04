@@ -1,0 +1,113 @@
+.col-md-2 {
+  border-right: 1px solid #eee;
+}
+
+.message-nav {
+  li.divider {
+    margin-top: 8px;
+    padding-top: 7px;
+    border-top: 1px solid #eee;
+  }
+
+  li.active {
+    background: #678d56;
+
+    a {
+      color: white;
+
+      &:hover {
+        background: #678d56;
+      }
+    }
+  }
+}
+
+.message-list {
+  li.message, li.message-head {
+    display: table;
+    width: 100%;
+  }
+
+  li.message {
+    border-top: 1px solid #ddd;
+
+    &:last-child {
+      border-bottom: 1px solid #ddd;
+    }
+
+    &:nth-child(even) {
+      background: #f9f9f9;
+    }
+
+    &:hover {
+      background: #f5f5f5;
+    }
+  }
+
+  a {
+    display: table-row;
+    width: 100%;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  a > span, .message-head strong {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 8px;
+  }
+
+  .message-unread .subject {
+    font-weight: bold;
+  }
+
+  .sent-on, .from, .to { color: #333; }
+
+  .sent-on {
+    width: 15%;
+  }
+
+  .from {
+    width: 24%;
+  }
+
+  .to {
+    width: 39%;
+  }
+
+  .subject {
+    width: 58%;
+  }
+
+  &.sent-message-list .subject { width: 43%; }
+}
+
+.single-message {
+  .message-metadata p {
+    margin-bottom: 6px;
+  }
+
+  h3 {
+    margin-top: 0;
+  }
+
+  h5 {
+    line-height: 1.6em;
+  }
+
+  .message-timestamp {
+    padding: 7px;
+  }
+
+  .message-contents {
+    padding-top: 18px;
+    margin-top: 7px;
+    border-top: 3px solid #ddd;
+  }
+}
+
+.message-header {
+  margin-bottom: 20px;
+}

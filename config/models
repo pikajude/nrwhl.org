@@ -1,0 +1,73 @@
+Team
+  name Text
+  friendlyName Text
+  logo Filename
+  gm UserId Maybe
+  agm UserId Maybe
+  color Text
+  the Bool default=true
+  UniqueFriendlyName friendlyName
+  deriving Show Eq
+
+RosterSpot
+  player UserId
+  team TeamId
+  stats PlayerStatsId
+  season SeasonId
+  active Bool
+  UniqueSeasonSpot player team season
+
+Message
+  creator UserId
+  subject Text
+  contents Markdown
+  created UTCTime
+  deriving Show
+
+ReceivedMessage
+  source MessageId
+  recipient UserId
+  unread Bool
+  hash MessageHash
+  UniqueHash hash
+  deriving Show
+
+DraftMessage
+  message Draft.MessageType
+  sender UserId
+  createdAt UTCTime
+  deriving Show
+
+User
+  name Username
+  password ByteString
+  email EmailAddress
+  verified Bool
+  verifyKey Text
+  resetPasswordKey Text
+  permissions Permissions
+  position Position Maybe
+  avatar Filename Maybe
+  currentTeam TeamId Maybe
+  currentTeamColor Text Maybe
+  unreadMessageCount Int
+  joinDate UTCTime
+  lastSeenDate UTCTime
+  UniqueEmail email
+  UniqueName name
+  deriving Show Typeable Eq
+
+Season
+  number Int
+  startDate UTCTime
+  endDate UTCTime
+  deriving Show
+
+PlayerStats
+  goals Int
+  assists Int
+  goalsAllowed Int
+  plusMinus Int
+  secondsPlayedOffense Int
+  secondsPlayedGk Int
+  deriving Show Eq

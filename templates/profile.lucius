@@ -1,0 +1,82 @@
+.bio-column {
+  h1 {
+    margin: 0;
+  }
+
+  hr {
+    margin: 10px 0;
+  }
+}
+
+.personal-column {
+  position: relative;
+  padding-left: 175px;
+  min-height: 143px;
+
+  h1, h4, h5 {
+    margin: 5px 0;
+  }
+
+  h1 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    line-height: 1.3;
+  }
+
+  form {
+    margin-top: 8px;
+  }
+
+  p.impersonate {
+    margin-top: 8px;
+  }
+}
+
+.img-column {
+  width: 140px;
+  position: absolute;
+  top: 0;
+  left: 15px;
+
+  #update-avatar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    & > a {
+      display: block;
+      width: 100%;
+      line-height: 140px;
+      background: white;
+      color: #555;
+      opacity: 0;
+      text-align: center;
+      font-size: 34px;
+
+      .glyphicon {
+        top: 6px;
+      }
+    }
+
+    &:hover > a, .open > a {
+      opacity: 0.5;
+    }
+
+    .dropdown-menu {
+      margin-top: 0;
+    }
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .personal-column {
+    min-height: 153px;
+  }
+
+  .stats-column .panel {
+    margin-bottom: 0;
+  }
+}

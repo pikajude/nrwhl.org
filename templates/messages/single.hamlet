@@ -1,0 +1,16 @@
+<div .single-message>
+  <div .message-metadata>
+    <p .from>
+      <strong>From:
+      ^{userLink sender_}
+    <p .to>
+      <strong>To:
+      ^{commas userLink recipients}
+    <p .subject>
+      <strong>Subject:
+      #{messageSubject src}
+  <div .message-contents>
+    #{messageContents src}
+
+  <div .btn-group .btn-group-sm .pull-right>
+    <a type=button .btn .btn-default href=@{MessageReplyR mid}>reply

@@ -1,0 +1,17 @@
+^{pageLinks msgs}
+<ul .list-unstyled .message-list>
+  <li .message-head>
+    <strong .sent-on>Sent
+    <strong .from>From
+    <strong .subject>Subject
+  $if null (pageResults msgs)
+    <li>Nothing here!
+  $else
+    $forall (Entity _ rm, Entity _ msg, Entity _ u) <- pageResults msgs
+      <li :receivedMessageUnread rm:.message-unread .message>
+        <a href=@{MessageReadR (receivedMessageHash rm)}>
+          <span .sent-on title=#{formatTime (messageCreated msg)}>
+            ^{friendlyTime (messageCreated msg)}
+          <span .from>^{userColored u}
+          <span .subject>#{messageSubject msg}
+^{pageLinks msgs}

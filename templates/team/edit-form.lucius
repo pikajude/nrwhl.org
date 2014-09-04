@@ -1,0 +1,47 @@
+.team-stuff {
+  position: relative;
+  min-height: 354px;
+
+  .logo-column {
+    width: 270px;
+    position: absolute;
+    padding: 10px;
+    top: 0;
+    left: 0;
+
+    .help-block {
+      margin-top: 9px;
+    }
+
+    #file-preview {
+      width: 250px;
+      height: 250px;
+    }
+  }
+
+  .team-column {
+    padding-left: 290px;
+  }
+
+  .needs-padding {
+    padding: 7px 15px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .team-stuff {
+    .logo-column {
+      position: relative;
+      padding-bottom: 18px;
+      width: 100%;
+
+      #file-preview {
+        margin: 0 auto;
+      }
+    }
+
+    .team-column {
+      padding-left: 0;
+    }
+  }
+}

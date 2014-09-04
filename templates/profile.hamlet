@@ -1,0 +1,35 @@
+<div .row>
+  <div .col-md-5 .personal-column>
+    <div .img-column>
+      $if editable
+        <div #update-avatar>
+          <a href=@{UserEditR (userName user)}>
+            <span .glyphicon .glyphicon-cog>
+      $maybe url <- userAvatar user
+        <img src=@{S3AssetR url} width=140 height=140 .img-circle>
+      $nothing
+        <img src="holder.js/140x140" .img-circle>
+    <div .bio-column>
+      <h1>#{userName user}
+      <h4>
+        $maybe team <- mteam
+          ^{teamLink team}
+        $nothing
+          Free agent
+      $maybe pos <- userPosition user
+        <h5 .position>#{pos}
+      $if releasable
+        <form #release-form action=@{PlayerReleaseR (userName user)} method=post role=form>
+          <button type=submit .btn .btn-default .btn-xs
+                  data-confirm="Are you sure? This can't be undone!">release
+      $if adm && not imp
+        <p .impersonate>
+          <a href=@{AdminImpersonateStartR userId} .btn .btn-default .btn-xs>impersonate
+  <div .col-md-7 .stats-column>
+    <div .panel .panel-default>
+      <div .panel-heading>
+        <h3 .panel-title>Career statistics
+      $if null allStats
+        <div .panel-body>No stats yet.
+      $else
+        ^{statTable allStats heading snd hf}

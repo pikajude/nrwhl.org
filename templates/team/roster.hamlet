@@ -1,0 +1,45 @@
+<h1>
+  <span style="color: ##{teamColor team}">#{teamName team}
+<table .table .table-striped>
+  <thead>
+    <tr>
+      <th>Username
+      <th>Position
+      <th>Title
+      <th>Release
+      <th>Promote
+  <tbody>
+    $forall (Entity k u, _) <- players
+      <tr>
+        <td>^{userLink u}
+        <td>
+          $maybe p <- userPosition u
+            #{p}
+          $nothing
+            -
+        <td>
+          $if isAGM u
+            AGM
+          $elseif isGM u
+            GM
+          $else
+            -
+        <td>
+          <form #release-form action=@{PlayerReleaseR (userName u)} method=post role=form>
+            <button type=submit .btn .btn-default .btn-xs
+                    data-confirm="Are you sure? This can't be undone!">release
+        <td>
+          $if not (isGM u)
+            <form .promote-form action=@{TeamRosterGMR tid}
+                  method=post role=form enctype=#{enctype}>
+              #{extra}
+              <input type=hidden name=#{fvId xml} value=#{toPathPiece k}>
+              <button type=submit .btn .btn-default .btn-xs
+                      data-confirm="Are you sure? This can't be undone!">to GM
+          $if not (isAGM u)
+            <form .promote-form action=@{TeamRosterAGMR tid}
+                  method=post role=form enctype=#{enctype}>
+              #{extra}
+              <input type=hidden name=#{fvId xml} value=#{toPathPiece k}>
+              <button type=submit .btn .btn-default .btn-xs
+                      data-confirm="Are you sure? This can't be undone!">to AGM
