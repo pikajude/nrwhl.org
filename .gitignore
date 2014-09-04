@@ -5,3 +5,7 @@ result
 static/combined
 static/tmp
 yesod-devel
+
+*.o
+*.hi
+Setup
