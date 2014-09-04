@@ -8,7 +8,7 @@ let
   genAttrs = pkgs.lib.genAttrs;
 in rec {
   tarball = let
-    darcsTag = builtins.substring 0 6
+    darcsTag = builtins.substring 0 7
       (builtins.readFile ./.git/refs/heads/master);
     in with pkgs; derivation rec {
       system = builtins.currentSystem;
