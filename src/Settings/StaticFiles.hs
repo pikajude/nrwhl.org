@@ -22,6 +22,31 @@ staticSite = if development then Static.staticDevel staticDir
 
 staticFiles Settings.staticDir
 
+staticFilesList "bower_components/jquery/dist" ["jquery.js"]
+staticFilesList "bower_components/bootstrap/dist"
+    [ "js/bootstrap.js"
+    , "css/bootstrap.css"
+    ]
+staticFilesList "bower_components/holderjs" ["holder.js"]
+staticFilesList "bower_components/tipsy/src"
+    [ "javascripts/jquery.tipsy.js"
+    , "stylesheets/tipsy.css"
+    ]
+staticFilesList "bower_components/selectize/dist"
+    [ "js/standalone/selectize.js"
+    , "css/selectize.bootstrap3.css"
+    ]
+
+-- match report page
+staticFilesList "bower_components/angular" [ "angular.js" ]
+staticFilesList "bower_components/angular-sanitize" [ "angular-sanitize.js" ]
+staticFilesList "bower_components/tv4" ["tv4.js"]
+staticFilesList "bower_components/objectpath" ["lib/ObjectPath.js"]
+staticFilesList "bower_components/angular-schema-form/dist"
+    [ "schema-form.js"
+    , "bootstrap-decorator.min.js"
+    ]
+
 combineSettings :: CombineSettings
 combineSettings = def
     { csCssPostProcess = \ fps ->
@@ -29,6 +54,20 @@ combineSettings = def
       . flip luciusRTMinified []
       . TLE.decodeUtf8
     , csJsPostProcess = uglify
+    , csStaticDirs = [ Settings.staticDir
+                     , "bower_components/jquery/dist"
+                     , "bower_components/bootstrap/dist"
+                     , "bower_components/holderjs"
+                     , "bower_components/tipsy/src"
+                     , "bower_components/selectize/dist"
+
+                     -- match report page
+                     , "bower_components/angular"
+                     , "bower_components/angular-sanitize"
+                     , "bower_components/tv4"
+                     , "bower_components/objectpath"
+                     , "bower_components/angular-schema-form/dist"
+                     ]
     }
     where
         errorIntro fps s = "Error minifying " ++ show fps ++ ": " ++ s

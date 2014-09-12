@@ -46,6 +46,7 @@ import Handler.Messages
 import Handler.Profile
 import Handler.Register
 import Handler.Release
+import Handler.Report
 import Handler.Team
 import Handler.Team.Roster
 import Handler.Verify

@@ -95,16 +95,15 @@ instance Yesod App where
 
         pc <- widgetToPageContent $ do
             $(combineScripts 'StaticR
-                [ js_jquery_js
+                [ jquery_js
                 , js_bootstrap_js
-                , js_holder_js
-                , js_tipsy_js
-                , js_selectize_js
+                , holder_js
+                , javascripts_jquery_tipsy_js
+                , js_standalone_selectize_js
                 ])
             $(combineStylesheets 'StaticR
-                [ css_normalize_css
-                , css_bootstrap_css
-                , css_tipsy_css
+                [ css_bootstrap_css
+                , stylesheets_tipsy_css
                 , css_selectize_bootstrap3_css
                 ])
             $(widgetFile "uploads")

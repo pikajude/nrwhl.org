@@ -33,6 +33,7 @@ library
                    Handler.Profile
                    Handler.Register
                    Handler.Release
+                   Handler.Report
                    Handler.Team
                    Handler.Team.Roster
                    Handler.Verify

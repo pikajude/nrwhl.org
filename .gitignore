@@ -1,5 +1,6 @@
 .env
 config/client_session_key.aes
+bower_components
 dist
 result
 static/combined

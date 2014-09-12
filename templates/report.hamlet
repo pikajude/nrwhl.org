@@ -1,0 +1,3 @@
+<div ng-app=matchReporter ng-controller=FormController>
+  <form sf-schema=reportSchema sf-form=reportForm sf-model=reportModel>
+  <pre>{{reportModel}}

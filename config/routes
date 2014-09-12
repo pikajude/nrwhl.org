@@ -43,4 +43,6 @@
 
 /draft DraftR GET
 
+/report ReportR GET
+
 /s3assets/#Filename S3AssetR GET

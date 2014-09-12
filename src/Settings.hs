@@ -5,6 +5,7 @@ import Control.Applicative
 import Control.Lens
 import Data.Default (def)
 import Data.Monoid ((<>))
+import Data.String
 import Data.Text (Text)
 import Data.Text.Lens
 import Data.Yaml
@@ -21,7 +22,7 @@ import Yesod.Default.Util
 
 type PersistConf = PostgresConf
 
-staticDir :: FilePath
+staticDir :: IsString s => s
 staticDir = "static"
 
 staticRoot :: AppConfig DefaultEnv x -> Text
