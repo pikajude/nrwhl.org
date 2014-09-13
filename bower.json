@@ -16,6 +16,9 @@
     "tipsy": "~0.1.7",
     "bootstrap": "~3.0.3",
     "angular": "~1.2.24",
-    "angular-schema-form": "git://github.com/joelteon/angular-schema-form#master"
+    "angular-schema-form": "git://github.com/joelteon/angular-schema-form#master",
+    "angular-sanitize": "~1.2.24",
+    "objectpath": "~1.0.5",
+    "tv4": "~1.0.17"
   }
 }

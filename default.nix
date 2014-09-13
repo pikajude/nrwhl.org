@@ -12,6 +12,8 @@
 
 , cabalInstall, yesodBin, nodePackages, postgresql93
 
+, preBuild ? ""
+
 , src
 }:
 
@@ -42,6 +44,7 @@ cabal.mkDerivation (self: {
     pwstoreFast random resourcet text textNormal thyme transformers
     yesod yesodAuth yesodCore yesodTest
   ];
+  inherit preBuild;
   postInstall = ''
     cp -pR static $out/static
     cp -pR config $out/config

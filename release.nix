@@ -23,8 +23,10 @@ in rec {
     let
       pkgs = import <nixpkgs> { inherit system; };
       haskellPackages = pkgs.lib.getAttrFromPath ["haskellPackages_${ghcVer}"] pkgs;
+      bowerStuff = pkgs.callPackage ./nix/bower.nix {};
     in haskellPackages.callPackage ./default.nix {
       src = if development then ./. else "${tarball}/dist.tar.gz";
+      preBuild = bowerStuff.link;
     }
   ));
 }

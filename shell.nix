@@ -9,17 +9,12 @@ in lib.mapAttrs (_: attrs:
       let
         pkgs = import <nixpkgs> { inherit system; };
         h = pkgs.lib.getAttrFromPath ["haskellPackages_${ghcVer}"] pkgs;
-        nodeDeps = pkgs.nodePackages.override {
-          generated = ./nix/bower-deps.nix;
-          self = nodeDeps;
-        };
       in lib.overrideDerivation bySystem
         (attrs: {
           buildInputs = [
-            h.cabalInstall h.ghcMod h.scan h.yesodBin nodeDeps.bower
+            h.cabalInstall h.ghcMod h.scan h.yesodBin pkgs.nodePackages.bower
           ] ++ attrs.buildInputs;
-          # dunno why we need this but w/e
-          NODE_PATH = "${nodeDeps.by-version.es5-ext."0.10.4"}/lib/node_modules";
+          NODE_PATH = "${pkgs.nodePackages.by-version.es5-ext."0.10.4"}/lib/node_modules";
         }))
       byCompiler)
   attrs) release
