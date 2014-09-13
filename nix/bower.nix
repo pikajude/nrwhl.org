@@ -20,7 +20,7 @@ in
   link = ''
     mkdir -p bower_components
     ${lib.concatStringsSep "\n"
-      (builtins.map (p: "ln -sv ${p}/packages/*/* bower_components/${p.name}")
+      (builtins.map (p: "ln -sv ${p}/packages/*/* bower_components/${(builtins.parseDrvName p.name).name}")
         paths)
      }
     ln -sv ${angular_schema} bower_components/angular-schema-form
