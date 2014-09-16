@@ -67,8 +67,6 @@ instance PersistField Markdown where
 instance PersistFieldSql Markdown where
     sqlType _ = SqlString
 
-deriving instance Show Markdown
-
 fromCamel :: String -> String
 fromCamel [] = []
 fromCamel (x : xs) = toLower x : go xs where

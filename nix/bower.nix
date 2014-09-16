@@ -1,7 +1,7 @@
 { fetchbower, fetchgit, lib }:
 let paths = [
   (fetchbower "objectpath" "1.0.5" "~1.0.5" "01jfkfv256swhdxixpxda98ywwph7c575d7w2577qhkjy6x4bddn")
-  (fetchbower "tipsy" "0.1.7" "~0.1.7" "0kv3d7figxzw771smi06fwf35ma9f2jds5mcc2c7ny0n2408609k")
+  (fetchbower "tipsy" "0.1.7" "~0.1.7" "0s8swbssmhl1lhmlrhspbmxpc0cawxq3a77amwz243d2x557d2x5")
   (fetchbower "holderjs" "2.4.0" "~2.4.0" "1al6v2d0amcaryc4yfblirbfqr095rw7i3dc7wg0sdi6lafwxqbr")
   (fetchbower "angular-sanitize" "1.2.24" "~1.2.24" "00yh8yx96bsav2alk4wgkqmv1a9l2zdvs7vmxvzmp1zq4xskhr6j")
   (fetchbower "selectize" "0.11.0" "~0.11.0" "1j4nscp5k489wwlh80x2ki04hbn4bhbz4nk0bzx4ypzrq0zv7vq1")
