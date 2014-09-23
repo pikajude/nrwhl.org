@@ -56,13 +56,9 @@ postTeamEditR tid = do
             $(widgetFile "team/edit")
 
 staffFilter :: (YesodAuth master, YesodPersist master, MonadTrans t,
-                PersistStore (YesodPersistBackend master (HandlerT master IO)),
-                Monad (t (HandlerT master IO)),
-                AuthId master ~ KeyBackend SqlBackend User,
-                PersistMonadBackend
-                  (YesodPersistBackend master (HandlerT master IO))
-                ~ SqlBackend) =>
-               KeyBackend SqlBackend Team -> t (HandlerT master IO) [Filter User]
+                Monad (t (HandlerT master IO)), AuthId master ~ UserId,
+                YesodPersistBackend master ~ SqlBackend)
+            => TeamId -> t (HandlerT master IO) [Filter User]
 staffFilter k = do
     ad <- lift $ enquireIf (`can` administrate)
     return [UserCurrentTeam P.==. Just k | not ad]

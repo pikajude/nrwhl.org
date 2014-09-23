@@ -11,6 +11,7 @@ module Model.Auth (
     isGM, isAGM
 ) where
 
+import Control.Monad.Reader
 import Data.Int (Int64)
 import Data.Maybe
 import Data.Typeable
@@ -23,22 +24,16 @@ import Yesod
 import Yesod.Auth
 
 requireThat :: (YesodAuth master, YesodPersist master, PersistEntity val,
-                PersistStore (YesodPersistBackend master (HandlerT master IO)),
-                Typeable val, AuthId master ~ KeyBackend
-                    (PersistMonadBackend
-                        (YesodPersistBackend master (HandlerT master IO))) val,
-                PersistEntityBackend val ~ PersistMonadBackend
-                   (YesodPersistBackend master (HandlerT master IO)))
+                PersistStore (PersistEntityBackend val), Typeable val,
+                AuthId master ~ Key val,
+                YesodPersistBackend master ~ PersistEntityBackend val)
             => (val -> Bool) -> HandlerT master IO (Entity val)
 requireThat f = maybe (permissionDenied "Sorry, you can't do that.") return =<< hopeThat f
 
 hopeThat :: (YesodAuth master, YesodPersist master, PersistEntity val,
-             PersistStore (YesodPersistBackend master (HandlerT master IO)),
-             Typeable val, AuthId master ~ KeyBackend
-                 (PersistMonadBackend
-                     (YesodPersistBackend master (HandlerT master IO))) val,
-             PersistEntityBackend val ~ PersistMonadBackend
-                (YesodPersistBackend master (HandlerT master IO)))
+             PersistStore (PersistEntityBackend val), Typeable val,
+             AuthId master ~ Key val,
+             YesodPersistBackend master ~ PersistEntityBackend val)
          => (val -> Bool) -> HandlerT master IO (Maybe (Entity val))
 hopeThat f = do
     ma <- maybeAuth
@@ -46,13 +41,9 @@ hopeThat f = do
         Just e@(Entity _ u) -> if f u then Just e else Nothing
         Nothing -> Nothing
 
-enquireIf :: (YesodAuth master, YesodPersist master, PersistEntity val,
-              PersistStore (YesodPersistBackend master (HandlerT master IO)),
-              Typeable val, AuthId master ~ KeyBackend
-                  (PersistMonadBackend
-                      (YesodPersistBackend master (HandlerT master IO))) val,
-              PersistEntityBackend val ~ PersistMonadBackend
-                 (YesodPersistBackend master (HandlerT master IO)))
+enquireIf :: (Key val ~ AuthId master, YesodPersistBackend master
+                ~ PersistEntityBackend val, YesodAuth master, YesodPersist master,
+              PersistEntity val, PersistStore (PersistEntityBackend val), Typeable val)
           => (val -> Bool) -> HandlerT master IO Bool
 enquireIf = fmap isJust . hopeThat
 
@@ -80,19 +71,21 @@ editUser victim u = administrate u || u == victim
 release :: User -> User -> Bool
 release player u = (isGM u || isAGM u) && userCurrentTeam u == userCurrentTeam player
 
-grantPermissions :: E.MonadSqlPersist m => Int64 -> UserId -> m ()
+grantPermissions :: (MonadIO m, PersistField a)
+                 => Int64 -> a -> ReaderT E.Connection m ()
 grantPermissions s uid = E.rawExecute
     [st|update "user" set "permissions" = "permissions" | ? where "user"."id" = ?|]
-    [PersistInt64 s, unKey uid]
+    [PersistInt64 s, toPersistValue uid]
 
-revokePermissions :: E.MonadSqlPersist m => Int64 -> UserId -> m ()
+revokePermissions :: (MonadIO m, PersistField a)
+                  => Int64 -> a -> ReaderT E.Connection m ()
 revokePermissions s uid = E.rawExecute
     [st|update "user" set "permissions" = "permissions" & ~? where "user"."id" = ?|]
-    [PersistInt64 s, unKey uid]
+    [PersistInt64 s, toPersistValue uid]
 
 grantOtters, revokeOtters, grantAdmin, revokeAdmin,
     grantGM, revokeGM, grantAGM, revokeAGM
-  :: E.MonadSqlPersist m => UserId -> m ()
+        :: (MonadIO m, PersistField a) => a -> ReaderT E.Connection m ()
 grantOtters = grantPermissions 1
 revokeOtters = revokePermissions 1
 grantAdmin = grantPermissions 2

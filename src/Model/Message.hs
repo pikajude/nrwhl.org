@@ -6,8 +6,9 @@ import Control.Applicative
 import Control.Monad hiding (forM_)
 import Control.Monad.Catch
 import Control.Monad.IO.Class
+import Control.Monad.Reader (ReaderT)
 import Data.Int
-import Data.Foldable (forM_)
+import Data.Foldable (Foldable, forM_)
 import qualified Data.Text as T
 import Data.Text.Lazy.Builder (toLazyText, Builder)
 import Data.Thyme
@@ -33,35 +34,31 @@ getRecipients mid lim = liftM2 (,)
             where_ (rmsg ^. ReceivedMessageSource ==. val mid)
             return us
 
-sendMessageTo :: (YesodPersist site,
-                  PersistQuery (YesodPersistBackend site (HandlerT site IO)),
-                  PersistMonadBackend (YesodPersistBackend site (HandlerT site IO))
-                      ~ SqlBackend)
-              => Message -> [UserId]
-              -> HandlerT site IO MessageId
+sendMessageTo :: (YesodPersist site, Foldable t,
+                  YesodPersistBackend site ~ SqlBackend)
+              => Message -> t UserId -> HandlerT site IO MessageId
 sendMessageTo msg receivers = runDB $ do
     mid <- insert msg
     forM_ receivers $ \ r -> do
         update r [UserUnreadMessageCount +=. 1]
         insert $ ReceivedMessage mid r True
-            (MessageHash (messageCreated msg) (unKey $ messageCreator msg) (unKey r))
+            (MessageHash (messageCreated msg) (toPersistValue $ messageCreator msg)
+            (toPersistValue r))
     return mid
 
-sendMessageFromTo :: (YesodPersist site,
-                      PersistQuery (YesodPersistBackend site (HandlerT site IO)),
-                      PersistMonadBackend (YesodPersistBackend site (HandlerT site IO))
-                        ~ SqlBackend)
-                  => UserId -> [UserId] -> T.Text
+sendMessageFromTo :: (YesodPersist site, Foldable t,
+                      YesodPersistBackend site ~ Connection)
+                  => UserId -> t UserId -> T.Text
                   -> ((Route site -> [(T.Text, T.Text)] -> T.Text) -> Builder)
-                  -> HandlerT site IO MessageId
+                  -> HandlerT site IO (Key Message)
 sendMessageFromTo s receivers title ct_ = do
     ct <- toLazyText . ct_ <$> getUrlRenderParams
     m <- liftIO getCurrentTime
     let msg = Message s title (Markdown ct) m
     sendMessageTo msg receivers
 
-setRead :: (PersistQuery m, PersistMonadBackend m ~ SqlBackend) =>
-           Entity ReceivedMessage -> m ()
+setRead :: MonadIO m
+        => Entity ReceivedMessage -> ReaderT SqlBackend m ()
 setRead (Entity rId rMsg) = when (receivedMessageUnread rMsg) $ do
     update (receivedMessageRecipient rMsg) [UserUnreadMessageCount -=. 1]
     update rId [ReceivedMessageUnread =. False]

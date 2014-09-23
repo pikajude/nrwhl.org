@@ -8,7 +8,6 @@ import Data.Function as F
 import Data.Int
 import Data.List as L
 import qualified Data.HashMap.Strict as M
-import qualified Data.Text.Read as R
 import Import hiding (Value)
 
 getPlayerFindR :: Handler Html
@@ -17,9 +16,7 @@ getPlayerFindR = getPlayerFindPageR 1
 getPlayerFindPageR :: Int -> Handler Html
 getPlayerFindPageR i = do
     let unId :: TeamId -> String
-        unId (Key k) = case k of
-                           PersistInt64 kk -> show kk
-                           _ -> error "Wrong type for ID"
+        unId = show . unTeamKey
         conf = pageconf i PlayerFindR PlayerFindPageR
 
     teams' <- runDB $ selectList [] []
@@ -51,6 +48,6 @@ getPlayerFindPageR i = do
 
 toIdList :: [Text] -> [TeamId]
 toIdList = mapMaybe readDec where
-    readDec t = case R.decimal t of
+    readDec t = case fromPersistValue (PersistText t) of
         Left _ -> Nothing
-        Right (x, _) -> Just (Key $ PersistInt64 x :: TeamId)
+        Right x -> Just x

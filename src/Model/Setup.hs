@@ -1,9 +1,9 @@
 module Model.Setup (runSetup) where
 
 import Control.Lens
-import Control.Monad (when, void)
 import Control.Monad.IO.Class
 import Control.Monad.Logger
+import Control.Monad.Reader
 import Control.Monad.Trans.Control
 import Control.Monad.Trans.Resource
 import Data.Text (Text)
@@ -25,15 +25,14 @@ runSetup = do
     makeSeason
     when (development && False) seedDevelopment
 
-makeSeason :: (PersistUnique m, Functor m, PersistMonadBackend m ~ SqlBackend)
-           => m ()
+makeSeason :: (Functor m, MonadIO m) => ReaderT SqlBackend m ()
 makeSeason = void $ do
     start <- liftIO getCurrentTime
     let startTime = start & _utctDay . weekDate . _wdDay .~ 1
         endTime = startTime & _utctDay . weekDate . _wdWeek +~ 8
     insertBy $ Season 1 startTime endTime
 
-addIndex :: MonadSqlPersist m => Text -> Text -> Text -> m ()
+addIndex :: MonadIO m => Text -> Text -> Text -> SqlPersistT m ()
 addIndex ty idx body = rawExecute [st|DO $$
     BEGIN
     IF NOT EXISTS (

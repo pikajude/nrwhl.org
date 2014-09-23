@@ -1,7 +1,6 @@
 module Handler.Messages.New where
 
 import qualified Data.Text as T
-import qualified Data.Text.Read as T
 import Data.Thyme (getCurrentTime)
 import Handler.Messages.Common
 import Import
@@ -62,7 +61,7 @@ postMessageRecipientSearchR = do
                     `like` (%) ++. sanitizeName (val $ fromText qu) ++. (%))
                 orderBy [asc (user ^. UserName)]
                 return user
-            selectRep . provideRep . return $ toJSON users
+            selectRep . provideRep . return . toJSON $ map entityIdToJSON users
         _ -> sendResponseStatus badRequest400 [st|Query too short.|]
 
 newMessageForm :: UserId -- sender
@@ -73,8 +72,7 @@ newMessageForm uid recipient msg extra = do
     currentTime <- liftIO getCurrentTime
 
     let optList = (mkOptionList opts)
-                { olReadExternal = (const Nothing ||| Just)
-                                 . fmap (Key . PersistInt64 . fst) . T.decimal
+                { olReadExternal = (const Nothing ||| Just) . fromPersistValue . PersistText
                 }
         opts = maybeToList
              $ fmap (\ (Entity k u) ->

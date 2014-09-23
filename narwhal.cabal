@@ -75,8 +75,9 @@ library
     ghc-options: -Wall -O0 -fwarn-tabs -fwarn-incomplete-uni-patterns
                  -fwarn-incomplete-record-updates -fwarn-monomorphism-restriction
                  -fwarn-auto-orphans -fwarn-implicit-prelude
+    extensions:  NoMonomorphismRestriction
   else
-    ghc-options: -Wall
+    ghc-options: -Wall -Werror
 
   extensions: CPP
               EmptyDataDecls

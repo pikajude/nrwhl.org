@@ -18,7 +18,7 @@ setCreds_ f c = clearCreds f >> setCreds f c
 
 impersonate :: UserId -> Handler ()
 impersonate uid = do
-    Entity (Key (PersistInt64 k)) _ <- requireThat (`can` administrate)
+    Entity (UserKey k) _ <- requireThat (`can` administrate)
     m <- runDB $ get404 uid
     setCreds_ False $ Creds "hash" (toText $ userName m) []
 
@@ -36,5 +36,5 @@ unpersonate = do
     where
         readKey :: String -> Maybe UserId
         readKey s = case reads s of
-                        ((x, _) : _) -> Just . Key $ PersistInt64 x
+                        ((x, _) : _) -> Just $ UserKey x
                         _ -> Nothing

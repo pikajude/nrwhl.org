@@ -27,17 +27,14 @@ postTeamRosterAGMR :: TeamId -> Handler Html
 postTeamRosterAGMR = undefined
 
 promotionForm :: (YesodPersist site, RenderMessage site FormMessage,
-                  PersistStore (YesodPersistBackend site (HandlerT site IO)),
-                  PersistMonadBackend (YesodPersistBackend site (HandlerT site IO))
-                  ~ SqlBackend) =>
-                 KeyBackend SqlBackend Team
-                 -> t
-                 -> RWST
-                      (Maybe (Env, FileEnv), site, [Lang])
-                      Enctype
-                      Ints
-                      (HandlerT site IO)
-                      (FormResult (KeyBackend SqlBackend User), (t, FieldView site))
+                  YesodPersistBackend site ~ SqlBackend)
+              => TeamId -> t
+              -> RWST
+                  (Maybe (Env, FileEnv), site, [Lang])
+                  Enctype
+                  Ints
+                  (HandlerT site IO)
+                  (FormResult (Key User), (t, FieldView site))
 promotionForm tid extra = do
     (userRes, userView) <- mreq userIdField sting Nothing
     return (userRes, (extra, userView))

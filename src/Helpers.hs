@@ -53,7 +53,7 @@ instance UserColored User where
     uColor = userCurrentTeamColor
     uName = userName
 
-instance UserColored a => UserColored (Entity a) where
+instance (PersistEntity a, UserColored a) => UserColored (Entity a) where
     uColor = uColor . entityVal
     uName = uName . entityVal
 

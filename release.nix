@@ -24,8 +24,9 @@ in rec {
       pkgs = import <nixpkgs> { inherit system; };
       haskellPackages = pkgs.lib.getAttrFromPath ["haskellPackages_${ghcVer}"] pkgs;
       bowerStuff = pkgs.callPackage ./nix/bower.nix {};
+      filtered = builtins.filterSource (path: type: baseNameOf path != "bower_components") ./.;
     in haskellPackages.callPackage ./default.nix {
-      src = if development then ./. else "${tarball}/dist.tar.gz";
+      src = if development then filtered else "${tarball}/dist.tar.gz";
       preBuild = bowerStuff.link;
     }
   ));

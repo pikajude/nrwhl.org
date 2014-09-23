@@ -8,6 +8,7 @@ import Control.Lens
 import Control.Monad
 import Control.Monad.IO.Class
 import Control.Monad.Random
+import Control.Monad.Reader
 import Database.Persist
 import Database.Persist.Sql
 import Data.Monoid
@@ -24,17 +25,17 @@ import Types.Permissions
 import Types.Position
 import Types.User
 
-sendMessageFromTo_ :: (PersistQuery m, PersistMonadBackend m ~ SqlBackend)
-                   => UserId -> [UserId] -> Text -> L.Text -> m ()
+sendMessageFromTo_ :: MonadIO m => UserId -> [UserId] -> Text
+                   -> L.Text -> ReaderT SqlBackend m ()
 sendMessageFromTo_ s receivers title ct = do
     m <- liftIO getCurrentTime
     mid <- insert $ Message s title (Markdown ct) m
     forM_ receivers $ \ r -> do
         update r [UserUnreadMessageCount +=. 1]
-        insert $ ReceivedMessage mid r True (MessageHash m (unKey s) (unKey r))
+        insert $ ReceivedMessage mid r True
+            (MessageHash m (toPersistValue s) (toPersistValue r))
 
-seedDevelopment :: (Functor m, PersistUnique m, PersistQuery m,
-                    PersistMonadBackend m ~ SqlBackend) => m ()
+seedDevelopment :: MonadIO m => ReaderT SqlBackend m ()
 seedDevelopment = seedPlayers
     -- seedSeason
     -- (seeded, ts) <- seedTeams
@@ -47,7 +48,7 @@ seedDevelopment = seedPlayers
     --         sendMessageFromTo_ adm ks "This is a test message!"
     --             [stext|Welcome to the site, everybody!|]
 
-seedSeason :: (PersistStore m, PersistMonadBackend m ~ SqlBackend) => m ()
+seedSeason :: MonadIO m => ReaderT SqlBackend m ()
 seedSeason = do
     s <- get currentSeasonId
     unlessMay s $ do
@@ -118,7 +119,7 @@ seedAdmin = do
             return uid
 -}
 
-seedPlayers :: (PersistQuery m, PersistMonadBackend m ~ SqlBackend) => m ()
+seedPlayers :: MonadIO m => ReaderT SqlBackend m ()
 seedPlayers = do
     m <- count ([] :: [Filter User])
     when (m < 200) $ do

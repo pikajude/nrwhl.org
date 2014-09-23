@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE StandaloneDeriving #-}
 {-# OPTIONS_GHC -fno-warn-orphans -fno-warn-auto-orphans #-}
 
@@ -6,6 +7,7 @@ module Model where
 
 import Control.Applicative
 import Control.Exception (throwIO)
+import Control.Monad.Reader
 import Control.Monad.Trans.Resource
 import Data.Aeson.TH
 import Data.ByteString (ByteString)
@@ -30,7 +32,7 @@ import Types.User
 import Yesod
 import Yesod.Core.Types (HandlerContents (HCError))
 
-share [mkPersist sqlOnlySettings, mkMigrate "migrateAll"]
+share [mkPersist sqlSettings, mkMigrate "migrateAll"]
     $(persistFileWith lowerCaseSettings "config/models")
 
 deriveJSON defaultOptions { fieldLabelModifier = fromCamel . drop 4 } ''Team
@@ -46,22 +48,18 @@ instance ToJSON User where
         , "last_seen_date" .= userLastSeenDate u
         ]
 
-instance ToJSON a => ToJSON (Entity a) where
-    toJSON (Entity k v) = object ["id" .= k, "entity" .= v]
-
 instance Monoid PlayerStats where
     mempty = PlayerStats 0 0 0 0 0 0
     mappend (PlayerStats a1 b1 c1 d1 e1 f1) (PlayerStats a2 b2 c2 d2 e2 f2)
         = PlayerStats (a1 + a2) (b1 + b2) (c1 + c2) (d1 + d2) (e1 + e2) (f1 + f2)
 
-maybeGet :: (PersistEntity a, PersistStore m,
-             PersistMonadBackend m ~ PersistEntityBackend a) =>
-            Maybe (Key a) -> m (Maybe a)
+maybeGet :: (PersistEntity a, PersistStore (PersistEntityBackend a), MonadIO m)
+         => Maybe (Key a) -> ReaderT (PersistEntityBackend a) m (Maybe a)
 maybeGet = maybe (return Nothing) get
 
-getError :: (Functor f, PersistEntity b, PersistStore f,
-             PersistEntityBackend b ~ PersistMonadBackend f) =>
-            String -> Key b -> f b
+getError :: (PersistEntity b, PersistStore (PersistEntityBackend b), MonadIO m,
+             Functor m)
+         => String -> Key b -> ReaderT (PersistEntityBackend b) m b
 getError s k = fromMaybe (error $ "Expected " ++ s ++ " with key "
                                ++ show k ++ ", none found") <$> get k
 

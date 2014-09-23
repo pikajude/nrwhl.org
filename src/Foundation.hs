@@ -12,7 +12,7 @@ import Control.Monad.Trans.Resource
 #endif
 import Crypto.PasswordStore
 import qualified Database.Persist
-import Database.Persist.Sql (SqlPersistT
+import Database.Persist.Sql (SqlBackend
 #ifdef DEVELOPMENT
                             , runSqlPool
 #endif
@@ -109,7 +109,7 @@ instance Yesod App where
             $(widgetFile "uploads")
             $(widgetFile "default-layout")
 
-        giveUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
+        withUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
 
     urlRenderOverride y (StaticR s) =
         Just $ uncurry (joinPath y (Settings.staticRoot $ settings y)) $ renderRoute s
@@ -140,7 +140,7 @@ instance Yesod App where
         handler ex StaticR resp
 
 instance YesodPersist App where
-    type YesodPersistBackend App = SqlPersistT
+    type YesodPersistBackend App = SqlBackend
     runDB = defaultRunDB persistConfig connPool
 instance YesodPersistRunner App where
     getDBRunner = defaultGetDBRunner connPool
@@ -210,7 +210,7 @@ impersonationKey :: Text
 impersonationKey = "_CROUCH"
 
 #if DEVELOPMENT
-db :: SqlPersistT (LoggingT (ResourceT IO)) b -> IO b
+-- db :: SqlPersistT (LoggingT (ResourceT IO)) b -> IO b
 db m = do
     dbconf <- withYamlEnvironment "config/postgresql.yml" Development
                   Database.Persist.loadConfig >>= Database.Persist.applyEnv
