@@ -77,7 +77,7 @@ library
                  -fwarn-auto-orphans -fwarn-implicit-prelude
     extensions:  NoMonomorphismRestriction
   else
-    ghc-options: -Wall -Werror
+    ghc-options: -Wall -Werror -O2
 
   extensions: CPP
               EmptyDataDecls
