@@ -18,7 +18,7 @@ in lib.mapAttrs (_: attrs:
           NODE_PATH = "${pkgs.nodePackages.by-version.es5-ext."0.10.4"}/lib/node_modules";
           shellHook = ''
             ${(pkgs.callPackage ./nix/bower.nix {}).link}
-            trap "git clean -fdx" EXIT
+            trap "rm -rfv bower_components dist" EXIT
           '';
         }))
       byCompiler)
