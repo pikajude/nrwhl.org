@@ -16,6 +16,10 @@ in lib.mapAttrs (_: attrs:
             pkgs.ruby21Libs.dotenv
           ] ++ attrs.buildInputs;
           NODE_PATH = "${pkgs.nodePackages.by-version.es5-ext."0.10.4"}/lib/node_modules";
+          shellHook = ''
+            ${(pkgs.callPackage ./nix/bower.nix {}).link}
+            trap "git clean -fdx" EXIT
+          '';
         }))
       byCompiler)
   attrs) release

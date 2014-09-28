@@ -10,15 +10,15 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "holderjs": "~2.4.0",
-    "jquery": "~2.1.1",
-    "selectize": "~0.11.0",
-    "tipsy": "~0.1.7",
-    "bootstrap": "~3.0.3",
-    "angular": "~1.2.24",
+    "holderjs": "*",
+    "jquery": "*",
+    "selectize": "*",
+    "tipsy": "*",
+    "bootstrap": "*",
+    "angular": "*",
     "angular-schema-form": "git://github.com/joelteon/angular-schema-form#master",
-    "angular-sanitize": "~1.2.24",
-    "objectpath": "~1.0.5",
-    "tv4": "~1.0.17"
+    "angular-sanitize": "*",
+    "objectpath": "*",
+    "tv4": "*"
   }
 }

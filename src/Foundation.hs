@@ -14,7 +14,7 @@ import Crypto.PasswordStore
 import qualified Database.Persist
 import Database.Persist.Sql (SqlBackend
 #ifdef DEVELOPMENT
-                            , runSqlPool
+                            , runSqlPool, SqlPersistT
 #endif
                             )
 import Data.ByteString (ByteString)
@@ -210,7 +210,7 @@ impersonationKey :: Text
 impersonationKey = "_CROUCH"
 
 #if DEVELOPMENT
--- db :: SqlPersistT (LoggingT (ResourceT IO)) b -> IO b
+db :: SqlPersistT (LoggingT (ResourceT IO)) a -> IO a
 db m = do
     dbconf <- withYamlEnvironment "config/postgresql.yml" Development
                   Database.Persist.loadConfig >>= Database.Persist.applyEnv
