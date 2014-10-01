@@ -76,7 +76,7 @@ recruitPlayer u t = do
                 UserCurrentTeamColor P.=. Just (teamColor team)]
 
 assignGM :: (MonadIO m, Functor m)
-         => Entity Team -> UserId -> ReaderT Connection m ()
+         => Entity Team -> UserId -> ReaderT SqlBackend m ()
 assignGM team uid = do
     case teamGm (entityVal team) of
         Just uk -> revokeGM uk
@@ -85,7 +85,7 @@ assignGM team uid = do
     recruitPlayer uid (entityKey team)
     P.update (entityKey team) [TeamGm P.=. Just uid]
 
-unassignGM :: MonadIO m => Entity Team -> ReaderT Connection m ()
+unassignGM :: MonadIO m => Entity Team -> ReaderT SqlBackend m ()
 unassignGM team = do
     case teamGm (entityVal team) of
         Just uk -> revokeGM uk
@@ -93,7 +93,7 @@ unassignGM team = do
     P.update (entityKey team) [TeamGm P.=. Nothing]
 
 assignAGM :: (MonadIO m, Functor m)
-          => Entity Team -> UserId -> ReaderT Connection m ()
+          => Entity Team -> UserId -> ReaderT SqlBackend m ()
 assignAGM team uid = do
     case teamAgm (entityVal team) of
         Just uk -> revokeAGM uk
@@ -102,7 +102,7 @@ assignAGM team uid = do
     recruitPlayer uid (entityKey team)
     P.update (entityKey team) [TeamAgm P.=. Just uid]
 
-unassignAGM :: MonadIO m => Entity Team -> ReaderT Connection m ()
+unassignAGM :: MonadIO m => Entity Team -> ReaderT SqlBackend m ()
 unassignAGM team = do
     case teamAgm (entityVal team) of
         Just uk -> revokeAGM uk

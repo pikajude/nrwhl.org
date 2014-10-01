@@ -194,6 +194,8 @@ instance YesodAuth App where
 
     authHttpManager = httpManager
 
+instance YesodAuthPersist App
+
 instance RenderMessage App FormMessage where
     renderMessage _ _ = defaultFormMessage
 

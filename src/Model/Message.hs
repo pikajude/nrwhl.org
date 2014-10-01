@@ -47,7 +47,7 @@ sendMessageTo msg receivers = runDB $ do
     return mid
 
 sendMessageFromTo :: (YesodPersist site, Foldable t,
-                      YesodPersistBackend site ~ Connection)
+                      YesodPersistBackend site ~ SqlBackend)
                   => UserId -> t UserId -> T.Text
                   -> ((Route site -> [(T.Text, T.Text)] -> T.Text) -> Builder)
                   -> HandlerT site IO (Key Message)

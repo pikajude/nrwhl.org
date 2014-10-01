@@ -57,7 +57,8 @@ postTeamEditR tid = do
 
 staffFilter :: (YesodAuth master, YesodPersist master, MonadTrans t,
                 Monad (t (HandlerT master IO)), AuthId master ~ UserId,
-                YesodPersistBackend master ~ SqlBackend)
+                AuthEntity master ~ User, YesodPersistBackend master ~ SqlBackend,
+                YesodAuthPersist master)
             => TeamId -> t (HandlerT master IO) [Filter User]
 staffFilter k = do
     ad <- lift $ enquireIf (`can` administrate)
