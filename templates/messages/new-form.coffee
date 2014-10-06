@@ -6,8 +6,9 @@ $(document).ready ->
     create: false
     render:
       option: (item, escape) ->
-        "<div>#{escape(item.name)}</div>"
-    onChange: (v) -> console.log(v)
+        color = if item.current_team_color
+          " style='color: ##{item.current_team_color}'"
+        "<div><span#{color}>#{escape(item.name)}</span></div>"
     load: (query, callback) ->
       if query.length >= 2
         $.ajax
@@ -16,10 +17,6 @@ $(document).ready ->
           data:
             query: query
           error: -> callback()
-          success: (res) ->
-            results = for obj in res
-              obj.entity.id = "#{obj.id}"
-              obj.entity
-            callback(results)
+          success: callback
       else
         callback()

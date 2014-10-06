@@ -1,7 +1,9 @@
-{ development ? false }:
+{ development ? false
+, profiling ? false
+}:
 
 let
-  release = import ./release.nix { inherit development; };
+  release = import ./release.nix { inherit development profiling; };
   lib = (import <nixpkgs> {}).lib;
 in lib.mapAttrs (_: attrs:
   lib.mapAttrs (ghcVer: byCompiler:
@@ -18,7 +20,7 @@ in lib.mapAttrs (_: attrs:
           NODE_PATH = "${pkgs.nodePackages.by-version.es5-ext."0.10.4"}/lib/node_modules";
           shellHook = ''
             ${(pkgs.callPackage ./nix/bower.nix {}).link}
-            trap "rm -rfv bower_components dist" EXIT
+            trap "git clean -fdx" EXIT
           '';
         }))
       byCompiler)

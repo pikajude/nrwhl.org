@@ -1,5 +1,7 @@
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE ViewPatterns #-}
 
 module Foundation where
@@ -22,8 +24,9 @@ import Data.Maybe
 import Data.Monoid
 import qualified Data.Text.Encoding as T
 import Handler.Error
-import Model
+import Model hiding (teamName)
 import Model.Auth
+import Model.Team
 import Data.Text (Text)
 import Network.HTTP.Conduit (Manager)
 import Prelude
@@ -33,6 +36,7 @@ import Settings.Development (development)
 import Settings.StaticFiles
 import Text.Hamlet (hamletFile)
 import Text.Jasmine (minifym)
+import Text.Shakespeare.Text (st)
 import Types.MessageHash
 import Types.S3
 import Types.User
@@ -74,6 +78,7 @@ instance Yesod App where
         mau <- fmap entityVal <$> maybeAuth
         currentTeam <- maybe (return Nothing) (runDB . maybeGet . userCurrentTeam) mau
         currentRoute <- getCurrentRoute
+        crumbs <- breadcrumbs
 
         let isProfilePage = currentRoute == fmap (UserViewR . userName) mau
             isSearchPage = currentRoute == Just PlayerFindR
@@ -87,6 +92,8 @@ instance Yesod App where
                                  Just (MessageRecipientsViewR _) -> True
                                  Just (MessageReadR _) -> True
                                  _ -> False
+            isAdminPage = currentRoute `elem` map Just
+                              [AdminR, ManageTeamsR, ManageTeamsNewR]
             isHome = currentRoute == Just HomeR
             isLogin = case currentRoute of
                           Just (AuthR _) -> True
@@ -201,6 +208,54 @@ instance RenderMessage App FormMessage where
 
 instance RenderMessage App Username where
     renderMessage a b msg = renderMessage a b (toText msg)
+
+instance YesodBreadcrumbs App where
+    breadcrumb r = case r of
+        AboutR -> simple "About"
+        AdminImpersonateStartR i -> return ([st|Impersonate ##{toPathPiece i}|], Just AdminR)
+        AdminImpersonateStopR -> return ("Stop impersonating", Just AdminR)
+        AdminR -> simple "Admin"
+        AuthR _ -> simple "Log in"
+        AuthRegisterR -> simple "Register"
+        AuthVerifyR _ _ -> return ("Verify your identity", Just AuthRegisterR)
+        DraftR -> simple "Draft"
+        FaviconR -> simple "favicon"
+        HomeR -> simple "Home"
+        ManageTeamsNewR -> return ("New team", Just ManageTeamsR)
+        ManageTeamsR -> return ("Manage teams", Just AdminR)
+        MessageInboxPageR i -> page i MessageInboxR
+        MessageInboxR -> simple "Messages"
+        MessageNewR -> return ("New", Just MessageInboxR)
+        MessageOutboxPageR i -> page i MessageOutboxR
+        MessageOutboxR -> return ("Outbox", Just MessageInboxR)
+        MessageReadR h -> return ([st|##{snippet h}|], Just MessageInboxR)
+        MessageRecipientSearchR -> return ("Recipient search", Just MessageNewR)
+        MessageRecipientsViewR i -> return ("Recipients", Just (MessageSentR i))
+        MessageReplyR h -> return ("Reply", Just (MessageReadR h))
+        MessageSentR i -> return ([st|##{toPathPiece i}|], Just MessageOutboxR)
+        PlayerFindPageR i -> page i PlayerFindR
+        PlayerFindR -> simple "Player search"
+        PlayerReleaseR u -> return ("Release", Just (UserViewR u))
+        ReportR -> simple "Match report"
+        RobotsR -> simple "robots.txt"
+        S3AssetR _ -> simple "S3 assets"
+        StaticR _ -> simple "Static"
+        TeamEditR tid -> teamPage "Edit" tid
+        TeamFindR -> simple "Team search"
+        TeamRosterAGMR tid -> teamPage "AGM" tid
+        TeamRosterGMR tid -> teamPage "GM" tid
+        TeamRosterR tid -> teamPage "Roster" tid
+        TeamViewR t ->
+            simple . maybe "Unknown team" (teamName . entityVal)
+                =<< runDB (getBy $ UniqueFriendlyName t)
+        UserEditR u -> return ("Edit", Just (UserViewR u))
+        UserViewR u -> return ([st|#{unwrap u}'s profile|], Nothing)
+        where
+            simple x = return (x, Nothing)
+            page x p = return ([st|Page #{x}|], Just p)
+            teamPage title tid = do
+                team <- runDB (get tid)
+                return (title, fmap (TeamViewR . teamFriendlyName) team)
 
 getExtra :: Handler Extra
 getExtra = fmap (appExtra . settings) getYesod

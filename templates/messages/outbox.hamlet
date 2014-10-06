@@ -4,16 +4,19 @@
     <strong .sent-on>Sent
     <strong .subject>Subject
     <strong .to>To
-  $forall (Entity k msg, Value recipients) <- pageResults sent
-    <li .message>
-      <a href=@{MessageSentR k}>
-        <span .sent-on title=#{formatTime (messageCreated msg)}>
-          ^{friendlyTime (messageCreated msg)}
-        <span .subject>#{messageSubject msg}
-        <span .to>
-          $with len <- length recipients
-            $if len > 10
-              #{show len} recipients
-            $else
-              ^{commas userColored recipients}
+  $if null (pageResults sent)
+    <li>Nothing here!
+  $else
+    $forall (Entity k msg, Value recipients) <- pageResults sent
+      <li .message>
+        <a href=@{MessageSentR k}>
+          <span .sent-on title=#{formatTime (messageCreated msg)}>
+            ^{friendlyTime (messageCreated msg)}
+          <span .subject>#{messageSubject msg}
+          <span .to>
+            $with len <- length recipients
+              $if len > 10
+                #{show len} recipients
+              $else
+                ^{commas userColored recipients}
 ^{pageLinks sent}

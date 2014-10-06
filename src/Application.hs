@@ -4,16 +4,12 @@
 {-# LANGUAGE ViewPatterns #-}
 {-# OPTIONS_GHC -fno-warn-orphans -fno-warn-auto-orphans #-}
 
-module Application (makeFoundation, main, getApplicationDev
-#ifdef DEVELOPMENT
-                   , devMain
-#endif
-                   ) where
+module Application (makeFoundation, main, getApplicationDev) where
 
 import Import
-import Aws (loadCredentialsDefault, defaultLog,
-             Configuration (Configuration), TimeInfo (Timestamp), LogLevel (..))
+import qualified Aws
 import qualified Airbrake as Air
+import Data.String (IsString)
 import Control.Concurrent.STM.Lifted
 import qualified Data.ByteString as B (null)
 import Data.Default (def)
@@ -32,9 +28,6 @@ import qualified Model.Setup as Setup
 import Database.Persist.Postgresql
 import Yesod.Core.Types (loggerSet, Logger (Logger))
 import Network.Wai.Logger (clockDateCacher)
-#ifdef DEVELOPMENT
-import System.Environment
-#endif
 
 import Handler.About
 import Handler.Admin
@@ -94,24 +87,35 @@ makeFoundation conf_ = do
         (runResourceT $ Database.Persist.runPool dbconf Setup.runSetup p)
         (messageLoggerSource foundation logger)
 
-    putStrLn "done"
-
     return foundation
 
 loadAwsConfigInto :: (MonadIO m, Functor m)
                   => AppConfig env Extra -> m (AppConfig env Extra)
 loadAwsConfigInto a@AppConfig { appExtra = ex } = do
-    creds <- fromMaybe (error "Failed loading AWS credentials.")
-           <$> loadCredentialsDefault
-    let config = Configuration Timestamp creds (defaultLog Warning)
-    return $ a { appExtra = ex { extraAWSConfig = config } }
+    creds_ <- (`Aws.loadCredentialsFromEnvOrFile` ckey) =<< Aws.credentialsDefaultFile
+    case creds_ of
+        Nothing -> error "Failed loading AWS credentials."
+        Just creds -> do
+            let config = Aws.Configuration Aws.Timestamp creds
+                            (Aws.defaultLog Aws.Warning)
+            return $ a { appExtra = ex { extraAWSConfig = config } }
 
 loadAirbrakeConfigInto :: (MonadIO m, Functor m)
                        => AppConfig env Extra -> m (AppConfig env Extra)
 loadAirbrakeConfigInto a@AppConfig { appExtra = ex } = do
-    creds <- fromMaybe (error "Failed loading Airbrake credentials.")
-        <$> Air.loadCredentialsDefault
-    return a { appExtra = ex { extraAirbrakeKey = creds } }
+    creds_ <- (`Air.loadCredentialsFromEnvOrFile` ckey) =<< Air.credentialsDefaultFile
+    case creds_ of
+        Nothing -> error "Failed loading Airbrake credentials."
+        Just creds ->
+            return a { appExtra = ex { extraAirbrakeKey = creds } }
+
+ckey :: IsString a => a
+ckey =
+#ifdef DEVELOPMENT
+    "nrwhl-dev"
+#else
+    "nrwhl"
+#endif
 
 getApplicationDev :: IO (Int, Application)
 getApplicationDev =
@@ -123,8 +127,3 @@ getApplicationDev =
 
 main :: IO ()
 main = defaultMain (fromArgs parseExtra) makeApplication
-
-#ifdef DEVELOPMENT
-devMain :: IO ()
-devMain = withArgs ["Development"] (putStrLn "initializing..." >> main)
-#endif

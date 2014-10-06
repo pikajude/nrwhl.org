@@ -5,8 +5,7 @@ module Handler.Error where
 
 import Airbrake
 import Control.Applicative
-import Control.Exception (SomeException)
-import Control.Monad.Catch (MonadCatch, catch)
+import Control.Monad.Catch (MonadCatch, catchAll)
 import Data.ByteString.UTF8 (toString)
 import Data.Text (Text, pack)
 import Paths_narwhal
@@ -24,7 +23,7 @@ text = id
 
 air :: (MonadCatch m, MonadHandler m, MonadLogger m, MonadBaseControl IO m)
     => Extra -> Text -> Text -> m ()
-air ex title desc = (`catch` hndl) $ do
+air ex title desc = (`catchAll` hndl) $ do
     req <- reqWaiRequest <$> getRequest
     root <- liftIO getCurrentDirectory
     let conf = AirbrakeConf
@@ -35,9 +34,7 @@ air ex title desc = (`catch` hndl) $ do
                        (Just version)
                        (Just root))
     $notifyReqQ conf req (Error title desc)
-    where
-        hndl :: MonadLogger m => SomeException -> m ()
-        hndl e = $logError (pack $ show e)
+    where hndl e = $logError (pack $ show e)
 
 handler :: Yesod site
         => Extra
@@ -101,4 +98,22 @@ handler key st (PermissionDenied t) = do
         provideRep . return $ object [ "message" .= [S.st|Permission denied: #{t}|] ]
 #endif
 
-handler _ _ m = error (show m)
+handler key st (InvalidArgs a) = do
+    air key "Invalid Args" (pack (show a))
+    selectRep $ do
+        provideRep . defaultLayout $ do
+            setTitle "Invalid Arguments"
+            let title = text "Invalid Arguments"
+                subtext = [shamlet|Arguments given: #{show a}|]
+            $(widgetFile "error")
+        provideRep . return $ object [ "message" .= [S.st|Invalid arguments: #{show a}|] ]
+
+handler key st NotAuthenticated = do
+    air key "Not Authenticated" "Not Authenticated"
+    selectRep $ do
+        provideRep . defaultLayout $ do
+            setTitle "Not Authenticated"
+            let title = text "Not Authenticated"
+                subtext = [shamlet|Try going <a href=/>back home</a>.|]
+            $(widgetFile "error")
+        provideRep . return $ object [ "message" .= text "Not authenticated" ]

@@ -48,8 +48,12 @@ body {
         }
       }
 
-      h1:first-child, h2:first-child {
+      .page-header {
         margin-top: 0;
+      }
+
+      .lightarrow {
+        color: #bbb;
       }
     }
 

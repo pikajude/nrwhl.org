@@ -25,7 +25,7 @@ teamLogoSize :: (Int, Int)
 teamLogoSize = (700, 700)
 
 {-
-- lots of shit can happen in her
+- lots of shit can happen in here
 -
 - * recruitPlayer sets the user's current team and team color, and adds
 - a RosterSpot record.

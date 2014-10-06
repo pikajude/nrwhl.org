@@ -9,15 +9,16 @@
     border-top: 1px solid #eee;
   }
 
+  li a {
+    color: #444;
+  }
+
   li.active {
-    background: #678d56;
-
     a {
-      color: white;
-
-      &:hover {
-        background: #678d56;
-      }
+      font-weight: bold;
+      border-left: 3px solid #ddd;
+      background: #eee;
+      padding-left: 12px;
     }
   }
 }

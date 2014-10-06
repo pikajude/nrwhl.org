@@ -38,7 +38,7 @@
               $if userUnreadMessageCount m > 0
                 <span .badge>#{userUnreadMessageCount m}
           $if isAdmin
-            <li .dropdown>
+            <li :isAdminPage:.active .dropdown>
               <a href=# .dropdown-toggle data-toggle=dropdown>
                 admin
                 <b .caret>
@@ -67,6 +67,13 @@ $#     <h1>
 $#       <a href=@{HomeR}>nrwhl
 <div #main>
   <div .container #everything>
+    $if isJust currentRoute
+      <ol .breadcrumb>
+        $with (title, parents) <- crumbs
+          $forall (route, title) <- reverse parents
+            <li>
+              <a href=@{route}>#{title}
+          <li .active>#{title}
     $maybe m <- mmsg
       <div .alert .alert-warning .alert-dismissable .messages>
         <button type=button .close data-dismiss=alert aria-hidden=true>×
@@ -82,3 +89,6 @@ $#       <a href=@{HomeR}>nrwhl
     <div .container .container-debug .alert .alert-dismissable .messages>
       <button type=button .close data-dismiss=alert aria-hidden=true>×
       #{show wreq}
+    <div .container .container-debug .alert .alert-dismissable .messages>
+      <button type=button .close data-dismiss=alert aria-hidden=true>×
+      #{show crumbs}

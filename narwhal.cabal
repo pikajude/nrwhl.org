@@ -72,12 +72,12 @@ library
 
   if flag(dev) || flag(library-only)
     cpp-options: -DDEVELOPMENT
-    ghc-options: -Wall -O0 -fwarn-tabs -fwarn-incomplete-uni-patterns
+    ghc-options: -Wall -Werror -O0 -fwarn-tabs -fwarn-incomplete-uni-patterns
                  -fwarn-incomplete-record-updates -fwarn-monomorphism-restriction
                  -fwarn-auto-orphans -fwarn-implicit-prelude
     extensions:  NoMonomorphismRestriction
   else
-    ghc-options: -Wall -Werror -O2
+    ghc-options: -Wall -O2
 
   extensions: CPP
               EmptyDataDecls
