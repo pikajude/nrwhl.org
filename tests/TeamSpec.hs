@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module TeamTest (teamSpecs) where
+module TeamSpec (teamSpecs) where
 
 import TestImport
 

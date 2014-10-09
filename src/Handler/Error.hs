@@ -106,7 +106,11 @@ handler key st (InvalidArgs a) = do
             let title = text "Invalid Arguments"
                 subtext = [shamlet|Arguments given: #{show a}|]
             $(widgetFile "error")
+#ifdef HLINT
+        nothing
+#else
         provideRep . return $ object [ "message" .= [S.st|Invalid arguments: #{show a}|] ]
+#endif
 
 handler key st NotAuthenticated = do
     air key "Not Authenticated" "Not Authenticated"

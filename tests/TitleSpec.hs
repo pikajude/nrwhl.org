@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module TitleTest (titleSpecs) where
+module TitleSpec (titleSpecs) where
 
 import TestImport
 import Text.XML.Cursor hiding (check)

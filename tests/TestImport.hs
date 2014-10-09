@@ -51,4 +51,4 @@ logIn u p = do
         setUrl . AuthR $ PluginR "hash" ["login"]
         addPostParam "username" (toText u)
         addPostParam "password" p
-    statusIs 302
+    statusIs 303

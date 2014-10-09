@@ -4,21 +4,29 @@
 
 module Main where
 
+import Application (makeFoundation)
 import Import
+import System.Environment
+import Test.Hspec
 import Yesod.Default.Config
 import Yesod.Test
-import Test.Hspec
-import Application (makeFoundation)
 
-import HomeTest
-import TeamTest
-import TitleTest
+import HomeSpec
+import TeamSpec
+import TitleSpec
 
 main :: IO ()
-main = hspec $ yesodSpecWithSiteGenerator generator $ do
+main = withEnv [ ("PGHOST", "127.0.0.1")
+               , ("PGPORT", "5432")
+               , ("PGUSER", "narwhal")
+               , ("PGDATABASE", "narwhal_test")
+               ]
+     $ hspec $ yesodSpecWithSiteGenerator generator $ do
     homeSpecs
     teamSpecs
     titleSpecs
+    where
+        withEnv pairs = (mapM_ (uncurry setEnv) pairs >>)
 
 generator :: IO App
 generator = do

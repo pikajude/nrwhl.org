@@ -1,7 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
-module HomeTest
-    ( homeSpecs
-    ) where
+
+module HomeSpec (homeSpecs) where
 
 import TestImport
 
