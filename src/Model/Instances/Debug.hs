@@ -11,9 +11,6 @@ import Data.Vault.Lazy
 import Network.Wai.Internal
 import Prelude (IO, Show (..))
 
-deriving instance Show RequestBodyLength
-deriving instance Show Request
-
 instance Show (IO ByteString) where
     show _ = "<IO ByteString>"
 
