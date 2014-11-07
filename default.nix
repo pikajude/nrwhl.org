@@ -10,9 +10,7 @@
 , waiLogger, warp, yaml, yesod, yesodAuth, yesodCore, yesodForm
 , yesodPagination, yesodStatic, yesodTest, yesodWebsockets
 
-, cabalInstall, yesodBin, nodePackages, postgresql
-
-, preBuild ? ""
+, bowerPreBuilder, cabalInstall, yesodBin, nodePackages, postgresql
 }:
 
 cabal.mkDerivation (self: {
@@ -47,7 +45,7 @@ cabal.mkDerivation (self: {
     pwstoreFast random resourcet text textNormal thyme transformers
     yesod yesodAuth yesodCore yesodTest
   ];
-  inherit preBuild;
+  preBuild = bowerPreBuilder ./nix/bower.nix;
   postInstall = ''
     cp -pR static $out/static
     cp -pR config $out/config

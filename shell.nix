@@ -18,7 +18,7 @@ in lib.mapAttrs (_: attrs:
             nodePackages.bower2nix rubyLibs.dotenv
           ] ++ attrs.buildInputs;
           NODE_PATH = "${pkgs.nodePackages.by-version.es5-ext."0.10.4"}/lib/node_modules";
-          shellHook = (pkgs.callPackage ./nix/bower.nix {}).link;
+          shellHook = pkgs.bowerPreBuilder ./nix/bower.nix;
         }))
       byCompiler)
   attrs) release

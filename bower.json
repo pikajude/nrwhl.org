@@ -16,7 +16,7 @@
     "tipsy": "*",
     "bootstrap": "*",
     "angular": "*",
-    "angular-schema-form": "git://github.com/joelteon/angular-schema-form#master",
+    "angular-schema-form": "*",
     "angular-sanitize": "*",
     "objectpath": "*",
     "tv4": "*"

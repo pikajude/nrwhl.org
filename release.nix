@@ -13,8 +13,6 @@ in rec {
       pkgs = import <nixpkgs> { inherit system; };
       profpath = x: if profiling then "${x}_profiling" else x;
       haskellPackages = pkgs.lib.getAttrFromPath [(profpath "haskellPackages_${ghcVer}")] pkgs;
-    in haskellPackages.callPackage ./default.nix {
-      preBuild = (pkgs.callPackage ./nix/bower.nix {}).link;
-    }
+    in haskellPackages.callPackage ./default.nix { }
   ));
 }
