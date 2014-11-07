@@ -61,6 +61,7 @@ Season
   number Int
   startDate UTCTime
   endDate UTCTime
+  UniqueSeasonNumber number
   deriving Show
 
 PlayerStats

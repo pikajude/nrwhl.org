@@ -1,4 +1,4 @@
-{ cabal, aeson, airbrake, aws, blazeHtml, blazeMarkup, conduit
+{ stdenv, cabal, aeson, airbrake, aws, blazeHtml, blazeMarkup, conduit
 , conduitCombinators, conduitExtra, dataDefault, emailValidate
 , esqueleto, exceptions, fastLogger, hjsmin, hlint, hspec, httpClient
 , httpConduit, httpTypes, imagemagick, lens, liftedBase
@@ -10,24 +10,25 @@
 , waiLogger, warp, yaml, yesod, yesodAuth, yesodCore, yesodForm
 , yesodPagination, yesodStatic, yesodTest, yesodWebsockets
 
-, cabalInstall, yesodBin, nodePackages, postgresql93
+, cabalInstall, yesodBin, nodePackages, postgresql
 
 , preBuild ? ""
-
-, src
 }:
 
 cabal.mkDerivation (self: {
   pname = "narwhal";
   version = "0.0.0";
-  inherit src;
+  src = stdenv.lib.sourceFilesBySuffices ./. [
+    ".cabal" ".coffee" ".eot" ".hamlet" ".hs" ".ico" ".julius" ".lucius" ".msg" ".png"
+    ".svg" ".text" ".ttf" ".txt" ".woff" ".yml" "models" "routes"
+  ];
   doCheck = false;
   noHaddock = true;
   isLibrary = true;
   isExecutable = true;
   buildTools = [
     nodePackages.coffee-script nodePackages.uglify-js
-    postgresql93 cabalInstall
+    postgresql cabalInstall
   ];
   buildDepends = [
     aeson airbrake aws blazeHtml blazeMarkup conduit conduitCombinators

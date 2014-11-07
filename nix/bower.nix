@@ -21,8 +21,10 @@ in
     if ! test -d bower_components; then
       mkdir -p bower_components
       ${lib.concatStringsSep "\n"
-        (builtins.map (p: "ln -sv ${p}/packages/*/* bower_components/${p.pname}")
-          paths)
+        (builtins.map (p:
+          let drv = builtins.parseDrvName p.name;
+          in "ln -sv ${p}/packages/*/* bower_components/${drv.name}")
+        paths)
        }
       ln -sv ${angular_schema} bower_components/angular-schema-form
     fi

@@ -15,7 +15,7 @@ in lib.mapAttrs (_: attrs:
         (attrs: {
           buildInputs = with pkgs; [
             h.cabalInstall h.ghcMod h.hlint h.scan h.yesodBin nodePackages.bower
-            nodePackages.bower2nix ruby21Libs.dotenv
+            nodePackages.bower2nix rubyLibs.dotenv
           ] ++ attrs.buildInputs;
           NODE_PATH = "${pkgs.nodePackages.by-version.es5-ext."0.10.4"}/lib/node_modules";
           shellHook = (pkgs.callPackage ./nix/bower.nix {}).link;

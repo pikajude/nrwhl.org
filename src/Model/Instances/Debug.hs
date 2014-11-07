@@ -8,7 +8,6 @@ module Model.Instances.Debug where
 import Data.ByteString (ByteString)
 import Data.Conduit (Source)
 import Data.Vault.Lazy
-import Network.Wai.Internal
 import Prelude (IO, Show (..))
 
 instance Show (IO ByteString) where
